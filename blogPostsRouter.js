@@ -21,7 +21,7 @@ router.post('/', jsonParser, (req, res) => {
 	for(let i=0; i<requiredFields.length; i++) {
 		const field = requiredFields[i];
 		if(!(field in req.body)) {
-			return res.send(`\`${field}\` is missing!`);
+			return res.status(400).send(`\`${field}\` is missing!`);
 		}
 	}
 	const post = BlogPosts.create(req.body.title, req.body.content, req.body.author, req.body.publishDate);
