@@ -33,5 +33,24 @@ describe('Blog Post API Endpoints', function() {
   			});
   	});
 
+  	it('should POST new blog post resource', function() {
+  		const newPost = {
+  			title: "Hello Universe", 
+  			content: "I am the hello world enemy", 
+  			author: "Bryan G", 
+  			publishDate: "4/5/2017"
+  		};
+  		return chai.request(app)
+  			.post('/blog-posts')
+  			.send(newPost)
+  			.then(function(res) {
+  				res.should.have.status(201);
+  				res.should.be.json;
+  				res.body.should.be.a('object');
+  				res.body.should.include.keys('title', 'content', 'author', 'publishDate');
+  				res.body.id.should.not.be.null;
+  				
+  			});
+  	});	
 
 });
