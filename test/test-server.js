@@ -62,14 +62,24 @@ describe('Blog Post API Endpoints', function() {
     	};
 
     	return chai.request(app)
-      	.get('/blog-posts')
-      	.then(function(res) {
-        	updateData.id = res.body[0].id;
-        	return chai.request(app)
-          	.put(`/blog-posts/${updateData.id}`)
-          	.send(updateData);
-      	});
+      		.get('/blog-posts')
+      		.then(function(res) {
+        		updateData.id = res.body[0].id;
+        		return chai.request(app)
+          			.put(`/blog-posts/${updateData.id}`)
+          			.send(updateData);
+      		});
   	});
 
-  	
+  	it('should DELETE existing blog-posts', function() {
+  		return chai.request(app)
+      		.get('/blog-posts')
+      		.then(function(res) {
+        		return chai.request(app)
+          			.delete(`/blog-posts/${res.body[0].id}`);
+      		})
+      		.then(function(res) {
+		        res.should.have.status(204);
+      		});
+  	});
 });
