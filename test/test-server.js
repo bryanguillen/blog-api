@@ -49,8 +49,27 @@ describe('Blog Post API Endpoints', function() {
   				res.body.should.be.a('object');
   				res.body.should.include.keys('title', 'content', 'author', 'publishDate');
   				res.body.id.should.not.be.null;
-  				
+
   			});
   	});	
 
+  	it('should PUT / update existing blog post', function() {
+  		const updateData = {
+      		title: 'foo',
+      		content: 'hello world',
+      		author: 'Bryan Guillen',
+      		publishDate: '4/5/2017'
+    	};
+
+    	return chai.request(app)
+      	.get('/blog-posts')
+      	.then(function(res) {
+        	updateData.id = res.body[0].id;
+        	return chai.request(app)
+          	.put(`/blog-posts/${updateData.id}`)
+          	.send(updateData);
+      	});
+  	});
+
+  	
 });
