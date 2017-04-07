@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 const blogPostsRouter = require('./blogPostsRouter');
 const jsonParser = bodyParser.json(); 
 const {PORT, DATABASE_URL} = require('./config'); //constants for app
-
 mongoose.Promise = global.Promise 
 
 //starting app 
@@ -52,15 +51,13 @@ function closeServer() {
   });
 }
 
+//use route
+app.use('/posts', blogPostsRouter);
 // if server.js is called directly (aka, with `node server.js`), this block
 // runs. but we also export the runServer command so other code (for instance, test code) can start the server as needed.
 if (require.main === module) {
   runServer().catch(err => console.error(err));
 };
 
-
-//use route
-//TEMPORARY COMMENT OUT!
-app.use('/posts', blogPostsRouter);
 
 module.exports = {app, runServer, closeServer};
