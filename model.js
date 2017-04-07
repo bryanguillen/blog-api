@@ -15,13 +15,13 @@ blogPostSchema.methods.apiRepr = function() {
     title: this.title, 
     content: this.content,
     author: this.author,
-    publishDate: this.publishDate;
+    publishDate: this.publishDate
   }
 };
 
 const BlogPost = mongoose.model('Blogpost', blogPostSchema);
 
-module.exports = {BlogPost}
+module.exports = {BlogPost};
 
 // function StorageException(message) {
 //    this.message = message;
