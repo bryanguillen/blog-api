@@ -9,6 +9,20 @@ const blogPostSchema = mongoose.Schema({
   publishDate: {type: String, required: true}
 });
 
+blogPostSchema.methods.apiRepr = function() {
+  return { 
+    id: this._id, 
+    title: this.title, 
+    content: this.content,
+    author: this.author,
+    publishDate: this.publishDate;
+  }
+};
+
+const BlogPost = mongoose.model('Blogpost', blogPostSchema);
+
+module.exports = {BlogPost}
+
 // function StorageException(message) {
 //    this.message = message;
 //    this.name = "StorageException";
