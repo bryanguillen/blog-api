@@ -4,7 +4,6 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const {BlogPosts} = require('./model');
 const blogPostsRouter = require('./blogPostsRouter');
 const jsonParser = bodyParser.json(); 
 const {PORT, DATABASE_URL} = require('./config'); //constants for app
@@ -62,6 +61,7 @@ if (require.main === module) {
 
 
 //use route
-app.use('/blog-posts', blogPostsRouter);
+//TEMPORARY COMMENT OUT!
+//app.use('/blog-posts', blogPostsRouter);
 
 module.exports = {app, runServer, closeServer};
