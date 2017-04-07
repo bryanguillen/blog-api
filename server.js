@@ -8,7 +8,6 @@ const blogPostsRouter = require('./blogPostsRouter');
 const jsonParser = bodyParser.json(); 
 const {PORT, DATABASE_URL} = require('./config'); //constants for app
 
-
 mongoose.Promise = global.Promise 
 
 //starting app 
@@ -62,6 +61,6 @@ if (require.main === module) {
 
 //use route
 //TEMPORARY COMMENT OUT!
-//app.use('/blog-posts', blogPostsRouter);
+app.use('/posts', blogPostsRouter);
 
 module.exports = {app, runServer, closeServer};
