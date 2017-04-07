@@ -5,8 +5,15 @@ const mongoose = require('mongoose');
 const blogPostSchema = mongoose.Schema({
   title: {type: String, required: true}, 
   content: {type: String, required: true}, //Remember Date.now gets today's date 
-  author: {type: String, required: true},
+  author: {
+    firstName: String,
+    lastName: String
+  },
   publishDate: {type: String, required: true}
+});
+
+blogPostSchema.virtual('authorString').get(function() {
+  return `${author.firstName} {$author.lastName`.trim()
 });
 
 blogPostSchema.methods.apiRepr = function() {
@@ -14,7 +21,7 @@ blogPostSchema.methods.apiRepr = function() {
     id: this._id, 
     title: this.title, 
     content: this.content,
-    author: this.author,
+    author: this.authorString,
     publishDate: this.publishDate
   }
 };
