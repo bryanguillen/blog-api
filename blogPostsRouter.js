@@ -4,6 +4,7 @@ const router = express.Router();
 //more dependencies and imports
 const bodyParser = require('body-parser');
 const {BlogPost} = require('./model');
+const {DATABASE_URL, PORT} = require('./config');
 const jsonParser = bodyParser.json();
 
 //add some blog posts to look at the data. 
@@ -20,18 +21,22 @@ router.get('/', (req, res) => {
 		})
 		.catch(err => {
 			console.error(err);
-			res.status(500)
+			res.status(500).json({errorMessage: 'Internal Server Error'});
 		})
 });
 
 router.get('/:id', (req, res) => {
 	BlogPost
-		.findOne(req.params.id)
+		.findById(req.params.id)
 		.exec()
-		.then(post =>res.json(post.apiRepr()))
+		.then(post => res.json(post.apiRepr()))
+		.catch(err => {
+		 	console.error(err);
+		 	res.status(500).json({errorMessage: 'Internal Server Error'});
+		})
 });
 
-router.post('/', (req, res) => {
+router.post('/', jsonParser, (req, res) => {
 	const requiredFields = ['title', 'content', 'author', 'publishDate'];
 	for(let i=0, length=requiredFields.length; i<length; i++) {
 		let field=requiredFields[i]; 
@@ -51,28 +56,11 @@ router.post('/', (req, res) => {
 		.then(post => res.status(201).json(post.apiRepr()))
 		.catch(err => {
 			console.error(err);
-			return res.status(500).send('Internal Server Error');
+			return res.status(500).json({errorMessage: 'Internal Server Error'});
 		});
 });	
 
 module.exports = router;
-
-// router.post('/', jsonParser, (req, res) => {
-// 	const requiredFields = ['title', 'content', 'author'];
-// 	for(let i=0; i<requiredFields.length; i++) {
-// 		const field = requiredFields[i];
-// 		if(!(field in req.body)) {
-// 			return res.status(400).send(`\`${field}\` is missing!`);
-// 		}
-// 	}
-// 	const post = BlogPosts.create(req.body.title, req.body.content, req.body.author, req.body.publishDate);
-//   	res.status(201).json(post);
-// });
-
-// router.delete('/:id', (req, res) => {
-// 	BlogPosts.delete(req.params.id);
-// 	res.status(204).end();
-// });
 
 // router.put('/:id', jsonParser, (req, res) => {
 //   const requiredFields = [
