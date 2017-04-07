@@ -1,20 +1,28 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// //more dependencies and imports
-// const bodyParser = require('body-parser');
-// const {BlogPosts} = require('./model');
-// const jsonParser = bodyParser.json();
+//more dependencies and imports
+const bodyParser = require('body-parser');
+const {BlogPost} = require('./model');
+const jsonParser = bodyParser.json();
 
-// //add some blog posts to look at the data. 
-// BlogPosts.create('The First Blog Post', 'This is my first blog post',
-// 				'Bryan Guillen', '4/4/2017');
-// BlogPosts.create('The Second Blog Post', 'This is my second blog post',
-// 				'Bryan Guillen', '4/4/2017');
-
-// router.get('/', (req, res) => {
-// 	res.status(200).send(BlogPosts.get());
-// });
+//add some blog posts to look at the data. 
+router.get('/', (req, res) => {
+	BlogPost
+		.find()
+		.limit(10)
+		.exec()
+		.then(posts => {
+			res.json({
+				posts: posts.map(
+					(post) => post.apiRepr())
+			});
+		})
+		.catch(err => {
+			console.error(err);
+			res.status(500)
+		})
+});
 
 // router.post('/', jsonParser, (req, res) => {
 // 	const requiredFields = ['title', 'content', 'author'];
