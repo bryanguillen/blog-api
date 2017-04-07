@@ -28,12 +28,34 @@ router.get('/:id', (req, res) => {
 	BlogPost
 		.findOne(req.params.id)
 		.exec()
-		.then(post =>res.json(post.apiRepr())
-    	.catch(err => {
-      		console.error(err);
-        	res.status(500).json({message: 'Internal server error'})
-    	})
+		.then(post =>res.json(post.apiRepr()))
 });
+
+router.post('/', (req, res) => {
+	const requiredFields = ['title', 'content', 'author', 'publishDate'];
+	for(let i=0, length=requiredFields.length; i<length; i++) {
+		let field=requiredFields[i]; 
+		if(!(field in req.body)) {
+			console.error('There is a body missing!')
+			return res.status(400).send(`${field} is missing from the request body`)
+		}
+	}
+
+	BlogPost
+		.create({
+			title: req.body.title,
+			content: req.body.content, 
+			author: req.body.author,
+			publishDate: req.body.publishDate || Date.now()
+		})
+		.then(post => res.status(201).json(post.apiRepr()))
+		.catch(err => {
+			console.error(err);
+			return res.status(500).send('Internal Server Error');
+		});
+});	
+
+module.exports = router;
 
 // router.post('/', jsonParser, (req, res) => {
 // 	const requiredFields = ['title', 'content', 'author'];
@@ -73,5 +95,3 @@ router.get('/:id', (req, res) => {
 //   });
 //   res.status(204).json(updatedItem);
 // });
-
-// module.exports = router;
