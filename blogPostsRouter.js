@@ -24,6 +24,17 @@ router.get('/', (req, res) => {
 		})
 });
 
+router.get('/:id', (req, res) => {
+	BlogPost
+		.findOne(req.params.id)
+		.exec()
+		.then(post =>res.json(post.apiRepr())
+    	.catch(err => {
+      		console.error(err);
+        	res.status(500).json({message: 'Internal server error'})
+    	})
+});
+
 // router.post('/', jsonParser, (req, res) => {
 // 	const requiredFields = ['title', 'content', 'author'];
 // 	for(let i=0; i<requiredFields.length; i++) {
