@@ -15,6 +15,10 @@ const app = express();
 //log http layer 
 app.use(morgan('common'));
 
+//parser
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // this function connects to our database, then starts the server
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
 
