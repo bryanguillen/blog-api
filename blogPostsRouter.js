@@ -60,13 +60,31 @@ router.post('/', jsonParser, (req, res) => {
 		});
 });	
 
-router.put('/:id', (req, res) => {
+router.put('/:id', jsonParser, (req, res) => {
 	BlogPost
-		.findById(req.params.id)
+		.findByIdAndUpdate(req.params.id, {$set: {
+			title: req.body.title,
+			content: req.body.content, 
+			author: req.body.author,
+			publishDate: req.body.publishDate	
+		}})
 		.exec()
+		.then(res.status(204).end());
 });
 
 module.exports = router;
+
+
+//json raw
+/*{
+	"title": "updated tiele",
+	"content": "updated content",
+	"author": {
+		"firstName": "Cookies",
+		"lastName": "Guillen"
+	},
+	"publishDate": "4/7/17"
+}*/
 
 // router.put('/:id', jsonParser, (req, res) => {
 //   const requiredFields = [
