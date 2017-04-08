@@ -62,12 +62,19 @@ router.post('/', jsonParser, (req, res) => {
 
 router.put('/:id', jsonParser, (req, res) => {
 	BlogPost
-		.findByIdAndUpdate(req.params.id, {$set: {
-			title: req.body.title,
-			content: req.body.content, 
-			author: req.body.author,
-			publishDate: req.body.publishDate	
-		}})
+		.findByIdAndUpdate(req.params.id, 
+			{$set: {
+				title: req.body.title,
+				content: req.body.content, 
+				author: req.body.author,
+				publishDate: req.body.publishDate	
+			}}, 
+			function(err) {
+				if(err) {
+					console.error(err);
+					return res.status(500).json({errorMessage: 'Internal Server Error'});				
+				}
+			});
 		.exec()
 		.then(res.status(204).end());
 });
