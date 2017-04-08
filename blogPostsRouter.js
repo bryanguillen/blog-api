@@ -60,6 +60,12 @@ router.post('/', jsonParser, (req, res) => {
 		});
 });	
 
+router.put('/:id', (req, res) => {
+	BlogPost
+		.findById(req.params.id)
+		.exec()
+});
+
 module.exports = router;
 
 // router.put('/:id', jsonParser, (req, res) => {
