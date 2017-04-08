@@ -73,37 +73,3 @@ router.put('/:id', jsonParser, (req, res) => {
 });
 
 module.exports = router;
-
-
-//json raw
-/*{
-	"title": "updated tiele",
-	"content": "updated content",
-	"author": {
-		"firstName": "Cookies",
-		"lastName": "Guillen"
-	},
-	"publishDate": "4/7/17"
-}*/
-
-// router.put('/:id', jsonParser, (req, res) => {
-//   const requiredFields = [
-//   	'id', 'title', 'content', 'author', 'publishDate'];
-//   for (let i=0; i<requiredFields.length; i++) {
-//     const field = requiredFields[i];
-//     if (!(field in req.body)) {
-//       return res.status(400).send(`${field} is missing`);
-//     }
-//   }
-//   if (req.params.id !== req.body.id) {
-//     return res.status(400).send(`Ids need to match.`);
-//   }
-//   const updatedItem = BlogPosts.update({
-//     id: req.params.id,
-//     title: req.body.title,
-//     content: req.body.content,
-//     author: req.body.author,
-//     publishDate: req.body.publishDate
-//   });
-//   res.status(204).json(updatedItem);
-// });
