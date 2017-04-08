@@ -72,4 +72,16 @@ router.put('/:id', jsonParser, (req, res) => {
 		.then(res.status(204).end());
 });
 
+router.delete('/:id', (req, res) => {
+	BlogPost
+		.findByIdAndRemove(req.params.id, function(err) {
+			if(err) {
+				console.error(err);
+				return res.status(500).json({errorMessage: 'Internal Server Error'});				
+			}
+		})
+		.exec()
+		.then(res.status(204).end());
+});
+
 module.exports = router;
