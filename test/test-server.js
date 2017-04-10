@@ -1,21 +1,53 @@
 //imports and requirements
-// const chai = require('chai');
-// const chaiHttp = require('chai-http');
-// const {app, runServer, closeServer} = require('../server');
-// const should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const {app, runServer, closeServer} = require('../server');
+const should = chai.should();
 
-// //allowing for http integration testing
-// chai.use(chaiHttp);
+//allowing for http integration testing
+chai.use(chaiHttp);
 
-// describe('Blog Post API Endpoints', function() {
-// 	//before makes sure the server is running and after makes sure to close it to stop any funny behavior
-// 	before(function() {
-//     	return runServer();
-//  	});
+function createPost() {
+	let post = {
+		title: "Random Post",
+		content: "Lorem Ipsum",
+		author: {
+			faker.firstName.firstName(),
+			faker.lastName.lastName()
+		},
+		publishDate: Date.now()
+	}
+}
 
-// 	after(function() {
-//     	return closeServer();
-//   	});
+function seedDatabase() {
+	let seedData = [];
+	for(let i=0; i<10; ++) {
+		seedData.push(createPost());
+	}
+	return BlogPost.insertMany(seedData);
+}
+
+function tearDownDatabase() {
+	return mongoose.connection.dropDatabase();
+}
+
+describe('Blog Post API Endpoints', function() {
+//before makes sure the server is running and after makes sure to close it to stop any funny behavior
+ 	before(function() {
+     	return runServer();
+  	});
+
+ 	beforeEach(function() {
+ 		return seedDatabase();
+ 	});
+
+ 	after(function() {
+     	return closeServer();
+   	});
+
+ 	afterEach(function() {
+ 		return tearDownDatabase();
+ 	})
 
 //   	it('should GET all blog post resources', function() {
 //   		return chai.request(app)
