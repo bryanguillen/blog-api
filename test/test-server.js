@@ -97,12 +97,50 @@ describe('Blog Post API Endpoints', function() {
  					return BlogPost.findById(res.body.id)
  				})
  				.then(function(post) {
- 					post.title.should.equal.newPost.title;
- 					post.content.should.equal.newPost.content;
- 					post.author.firstName.should.equal.newPost.author.firstName;
- 					post.author.lastName.should.equal.newPost.author.lastName;
- 					post.author.publishDate.should.equal.newPost.publishDate;
+ 					post.title.should.equal(newPost.title);
+ 					post.content.should.equal(newPost.content);
+ 					post.author.firstName.should.equal(newPost.author.firstName);
+ 					post.author.lastName.should.equal(newPost.author.lastName);
+ 					post.author.publishDate.should.equal(newPost.publishDate);
  				});
+ 		});
+ 	})
+
+ 	describe('UPDATE CURRENT RESOURCE', function() {
+ 		//UPDATE EXISTING REOURCE
+ 		//Strategy
+ 		//make sure we get the correct status code,
+ 		//it has been updated in database
+ 		let updateData = {
+ 			title: "New Title",
+ 			content: "New Content",
+ 			author: {
+ 				firstName: "",
+ 				lastName: ""
+ 			},
+ 			publishDate: ""
+ 		}
+ 		it('should update existing post', function() {
+ 			return BlogPost
+ 				.findOne()
+ 				.exec()
+ 				.then(function(post) {
+ 					updateData.id = post.id;
+ 					updateData.author.firstName = post.author.firstName;
+ 					updateData.author.lastName = post.author.lastName;
+ 					updateData.publishDate = post.publishDate;
+ 					return chai.request(app)
+ 						.put(`/posts/${post.id}`)
+ 						.send(updateData)
+ 				})
+ 				.then(function(res) {
+ 					res.should.have.status(204);
+ 					return BlogPost.findById(updateData.id).exec()
+ 				})
+ 				.then(function(updatedPost) {
+ 					updatedPost.title.should.equal(updateData.title);
+ 					updatedPost.content.should.equal(updateData.content);
+ 				})
  		});
  	});
 
