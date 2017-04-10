@@ -61,14 +61,6 @@ router.post('/', jsonParser, (req, res) => {
 });	
 
 router.put('/:id', jsonParser, (req, res) => {
-	const requiredFields = ['title', 'content', 'author', 'publishDate'];
-	for(let i=0, length=requiredFields.length; i<length; i++) {
-		let field=requiredFields[i]; 
-		if(!(field in req.body)) {
-			console.error('There is a body missing!')
-			return res.status(400).send(`${field} is missing from the request body`)
-		}
-	}
 	BlogPost
 		.findByIdAndUpdate(req.params.id, 
 			{$set: {
@@ -76,15 +68,14 @@ router.put('/:id', jsonParser, (req, res) => {
 				content: req.body.content, 
 				author: req.body.author,
 				publishDate: req.body.publishDate	
-			}}, 
-			function(err) {
-				if(err) {
-					console.error(err);
-					return res.status(500).json({errorMessage: 'Internal Server Error'});				
-				}
-			});
+			}}
+		)
 		.exec()
-		.then(res.status(204).end());
+		.then(res.status(204).end())
+		.catch(err => {
+		 	console.error(err);
+		 	res.status(500).json({errorMessage: 'Internal Server Error'});
+		})
 });
 
 router.delete('/:id', (req, res) => {
