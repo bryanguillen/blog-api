@@ -74,4 +74,36 @@ describe('Blog Post API Endpoints', function() {
  				});
  		});
  	})
+
+ 	describe('POST NEW RESOURCE', function(){
+ 		//CREATE A NEW RESOURCE
+ 		//Verify this by checking that it returns the correct status code
+ 		//it returns the json rep of the new post
+ 		//check that it is persisted into the database
+ 		let res; 
+ 		let newPost = randomPost();
+ 		it('should create and show the new post', function() {
+ 			return chai.request(app)
+ 				.post('/posts')
+ 				.send(newPost)
+ 				then(function(_res) {
+ 					res = _res;
+ 					res.should.have.status(201);
+ 					res.should.be.json;
+ 					res.should.include.keys(
+ 						'title', 'content', 'author', 'firstName', 'lastName', 'publishDate'
+ 					)
+ 					res.should.not.be.null;
+ 					return BlogPost.findById(res.body.id)
+ 				})
+ 				.then(function(post) {
+ 					post.title.should.equal.newPost.title;
+ 					post.content.should.equal.newPost.content;
+ 					post.author.firstName.should.equal.newPost.author.firstName;
+ 					post.author.lastName.should.equal.newPost.author.lastName;
+ 					post.author.publishDate.should.equal.newPost.publishDate;
+ 				});
+ 		});
+ 	});
+
 });
