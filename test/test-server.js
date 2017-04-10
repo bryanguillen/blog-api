@@ -144,4 +144,24 @@ describe('Blog Post API Endpoints', function() {
  		});
  	});
 
+ 	describe('DELETE ENDPOINT', function() {
+ 		let post;
+ 		it('should remove post permenantly', function() {
+ 			BlogPost
+  				.findOne()
+  				.exec()
+  				.then(function(_post) {
+    			post = _post;
+    			return chai.request(app).delete(`/restaurants/${restaurant.id}`);
+  				})
+  				.then(function(res) {
+    				res.should.have.status(204);
+    				return BlogPost.findById(posts.id).exec();
+  				})
+  				.then(function(_post) {
+    				should.not.exist(_post);
+  				});
+ 		})
+ 	})
+
 });
