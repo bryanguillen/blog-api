@@ -61,6 +61,14 @@ router.post('/', jsonParser, (req, res) => {
 });	
 
 router.put('/:id', jsonParser, (req, res) => {
+	const requiredFields = ['title', 'content', 'author', 'publishDate'];
+	for(let i=0, length=requiredFields.length; i<length; i++) {
+		let field=requiredFields[i]; 
+		if(!(field in req.body)) {
+			console.error('There is a body missing!')
+			return res.status(400).send(`${field} is missing from the request body`)
+		}
+	}
 	BlogPost
 		.findByIdAndUpdate(req.params.id, 
 			{$set: {
